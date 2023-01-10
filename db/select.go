@@ -6,11 +6,15 @@ import (
 	"github.com/go-ole/go-ole"
 )
 
-//Select - berilgan sql so'rov asosida bazadan ma'lumotlarni qidiradi
-func Select(sql string, args ...interface{}) ([]map[string]interface{}, error) {
+// Select - berilgan sql so'rov asosida bazadan ma'lumotlarni qidiradi
+func Select(path, sql string, args ...interface{}) ([]map[string]interface{}, error) {
+	db, err := connect(path)
+	if err != nil {
+		return nil, err
+	}
 	defer ole.CoUninitialize()
-	defer DB.Close()
-	rows, err := DB.Query(sql, args...)
+	defer db.Close()
+	rows, err := db.Query(sql, args...)
 	if err != nil {
 		return nil, err
 	}
@@ -50,12 +54,4 @@ func Select(sql string, args ...interface{}) ([]map[string]interface{}, error) {
 		retMap = append(retMap, retM)
 	}
 	return retMap, nil
-}
-
-//Exec - berilgan sql asosida bazaga ma'lumotlarni yozadi
-func Exec(sql string, args ...interface{}) error {
-	defer ole.CoUninitialize()
-	defer DB.Close()
-	_, err := DB.Exec(sql, args...)
-	return err
 }

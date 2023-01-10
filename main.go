@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"flag"
 	"fmt"
+	"os"
 	"paradox_reader/db"
 	"strconv"
 	"strings"
@@ -11,12 +12,18 @@ import (
 
 /*
 Dasturga quyidagicha so'rov yuborildi
-paradox.exe -query="select * from rs_nakl where Data=? and ID=?" -arg="11.05.2020|31"
+paradox.exe -path "\\HP\db" -query="select * from rs_nakl where Data=? and ID=?" -arg="11.05.2020|s;31|i"
 */
 func main() {
+	path := flag.String("path", "", "Paradox bazasining joylashgan manzili")
 	query := flag.String("query", "", "Paradox bazasiga yuboriladigan sql so'rov")
 	args := flag.String("args", "", "Paradox bazasiga yuboriladigan so'rovning argumentlari")
 	flag.Parse()
+
+	if *path == "" {
+		fmt.Println("Paradox base path not found")
+		os.Exit(1)
+	}
 
 	var arguments []interface{}
 	if *args != "" {
@@ -50,21 +57,13 @@ func main() {
 			}
 		}
 	}
-	if strings.Contains(*query, "insert") || strings.Contains(*query, "update") || strings.Contains(*query, "delete") {
-		err := db.Exec(*query, arguments...)
-		if err != nil {
-			panic(err)
-		}
-	} else {
-		data, err := db.Select(*query, arguments...)
-		fmt.Println(err)
-		if err != nil {
-			panic(err)
-		}
-		js, err := json.Marshal(data)
-		if err != nil {
-			panic(err)
-		}
-		fmt.Print(string(js))
+	data, err := db.Select(*path, *query, arguments...)
+	if err != nil {
+		panic(err)
 	}
+	js, err := json.Marshal(data)
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println(string(js))
 }
