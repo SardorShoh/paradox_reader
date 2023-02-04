@@ -12,7 +12,7 @@ import (
 
 /*
 Dasturga quyidagicha so'rov yuborildi
-paradox.exe -path "\\HP\db" -query="select * from rs_nakl where Data=? and ID=?" -arg="11.05.2020|s;31|i"
+paradox.exe -path "\\HP\db" -query="select * from rs_nakl where Data=? and ID=?" -args="11.05.2020|s;31|i"
 */
 func main() {
 	path := flag.String("path", "", "Paradox bazasining joylashgan manzili")
