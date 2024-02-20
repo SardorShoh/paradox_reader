@@ -45,7 +45,7 @@ func Select(path, sql string, args ...interface{}) ([]map[string]interface{}, er
 				if col == nil {
 					retM[strings.ToLower(colNames[i])] = col
 				} else {
-					retM[strings.ToLower(colNames[i])] = decrypt(col.(string))
+					retM[strings.ToLower(colNames[i])] = Decrypt(col.(string))
 				}
 			} else {
 				retM[strings.ToLower(colNames[i])] = col

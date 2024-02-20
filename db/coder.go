@@ -11,8 +11,8 @@ var letters = map[rune]string{
 	185: "№",
 }
 
-// decrypt - matnni cp1251 koderovkadan utf8 koderovkasiga o'tkazadi
-func decrypt(str string) string {
+// Decrypt - matnni cp1251 koderovkadan utf8 koderovkasiga o'tkazadi
+func Decrypt(str string) string {
 	var ret string
 	for _, r := range str {
 		if r >= 1025 {
